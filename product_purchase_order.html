@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Product Purchase Order | Enterprise Procurement</title>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #065f46;
+            --primary-light: #10b981;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --accent: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px 16px;
+        }
+
+        .po-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 680px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 26px 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #d1fae5;
+            font-weight: 500;
+        }
+
+        form {
+            padding: 28px 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.2s;
+            background-color: #f8fafc;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: var(--primary-light);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .summary-box {
+            background-color: #ecfdf5;
+            border: 1.5px dashed #34d399;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-top: 10px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        .summary-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #047857;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 14px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-reset {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-reset:hover {
+            background-color: #e2e8f0;
+        }
+
+        .success-box {
+            display: none;
+            margin-top: 20px;
+            padding: 14px;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            color: var(--accent);
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="po-card">
+        <div class="header">
+            <h1>Procurement Management System</h1>
+            <p>Official Commercial Product Purchase Order (PO)</p>
+        </div>
+
+        <form id="poForm" onsubmit="generatePO(event)">
+            <div class="form-grid">
+                
+                <!-- 1. Product Name -->
+                <div class="full-width">
+                    <label for="productName">Product Name / Item Description <span class="required">*</span></label>
+                    <input type="text" id="productName" name="productName" placeholder="e.g. Dell Latitude 5430 Business Laptop 16GB / 512GB SSD" required>
+                </div>
+
+                <!-- 2. Product Code -->
+                <div>
+                    <label for="productCode">Product / SKU Code <span class="required">*</span></label>
+                    <input type="text" id="productCode" name="productCode" placeholder="e.g. PRD-DELL-5430-IN" pattern="^[A-Za-z0-9\-]+$" required title="Alphanumeric Product Code">
+                </div>
+
+                <!-- 5. Date -->
+                <div>
+                    <label for="orderDate">Order Placement Date <span class="required">*</span></label>
+                    <input type="date" id="orderDate" name="orderDate" value="2026-11-14" required>
+                </div>
+
+                <!-- 3. Price -->
+                <div>
+                    <label for="unitPrice">Unit Price (₹) <span class="required">*</span></label>
+                    <input type="number" id="unitPrice" name="unitPrice" placeholder="0.00" min="0.01" step="0.01" oninput="calculateTotal()" required>
+                </div>
+
+                <!-- 4. Quantity -->
+                <div>
+                    <label for="quantity">Quantity (Units) <span class="required">*</span></label>
+                    <input type="number" id="quantity" name="quantity" placeholder="1" min="1" step="1" oninput="calculateTotal()" required>
+                </div>
+
+            </div>
+
+            <!-- Dynamic Total Display -->
+            <div class="summary-box">
+                <span class="summary-label">Estimated Total Order Value:</span>
+                <span class="summary-amount" id="totalDisplay">₹0.00</span>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit">Submit Purchase Order</button>
+                <button type="reset" class="btn-reset" onclick="resetTotal()">Clear Form</button>
+            </div>
+
+            <div id="orderConfirmation" class="success-box">
+                ✓ Purchase Order submitted successfully! Order reference: <strong>PO-2026-9842</strong>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function calculateTotal() {
+            const price = parseFloat(document.getElementById('unitPrice').value) || 0;
+            const qty = parseInt(document.getElementById('quantity').value, 10) || 0;
+            const total = price * qty;
+            document.getElementById('totalDisplay').textContent = '₹' + total.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function resetTotal() {
+            document.getElementById('totalDisplay').textContent = '₹0.00';
+            document.getElementById('orderConfirmation').style.display = 'none';
+        }
+
+        function generatePO(e) {
+            e.preventDefault();
+            const conf = document.getElementById('orderConfirmation');
+            conf.style.display = 'block';
+            calculateTotal();
+        }
+    </script>
+</body>
+</html>
